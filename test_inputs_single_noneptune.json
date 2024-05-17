@@ -3,13 +3,13 @@
         "phase":"test",
         "type":"multi",
         "image_dir":{
-            "DUET":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/Normalized/F/",
-            "Brightfield":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/Normalized/B/"
+            "DUET":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/F/",
+            "Brightfield":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/B/"
         },
-        "output_dir":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/Normalized/Results/Concatenated_RGB_retry/",
-        "model_file":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/Results/Concatenated_RGB/models/Collagen_Seg_Model_Latest.pth",
+        "output_dir":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/DUET UCD PATH vs CGPL/UCD-PATH/Results/Multimodal_NoDecay/",
+        "model_file":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/Results/Multimodal_NoDecay/models/Collagen_Seg_Model_Latest.pth",
         "model_details":{
-            "architecture":"Unet++",
+            "architecture":"multimodal",
             "encoder":"resnet34",
             "encoder_weights":"imagenet",
             "active":"sigmoid",
@@ -20,7 +20,9 @@
         "preprocessing":{
             "image_size":"512,512,6",
             "mask_size":"512,512,1",
-            "color_transform":"None"
+            "color_transform":"None",
+            "image_means": "0.18141944706439972,0.24163347482681274,0.051249127835035324,0.7697744369506836,0.6445655822753906,0.8100588321685791",
+            "image_stds": "0.10823053866624832,0.12663649022579193,0.01989387534558773,0.16845367848873138,0.18152597546577454,0.12351231276988983"
         }
     }
 }

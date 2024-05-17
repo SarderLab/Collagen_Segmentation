@@ -335,8 +335,9 @@ def make_training_set(phase,train_img_paths, train_tar, valid_img_paths, valid_t
         # Continuous target type augmentations
         transforms_training = ComposeDouble([
             AlbuSeg2d(albumentations.HorizontalFlip(p=0.2)),
-            AlbuSeg2d(albumentations.RandomBrightnessContrast(p=0.5)),
-            AlbuSeg2d(albumentations.ShiftScaleRotate(p=0.3)),
+            AlbuSeg2d(albumentations.RandomBrightnessContrast(p=0.8)),
+            AlbuSeg2d(albumentations.GaussianBlur(p=0.2)),
+            AlbuSeg2d(albumentations.ShiftScaleRotate(p=0.5)),
             AlbuSeg2d(albumentations.VerticalFlip(p=0.2)),
             FunctionWrapperDouble(np.moveaxis, input = True, target = True, source = -1, destination = 0)
         ])

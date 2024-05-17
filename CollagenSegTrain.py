@@ -34,13 +34,15 @@ class MultiModalModel(torch.nn.Module):
                  in_channels,
                  active,
                  n_classes,
-                 duet_decay = True):
+                 duet_decay = False,
+                 phase = 'train'):
         super().__init__()
 
         self.in_channels = in_channels
         self.active = active
         self.n_classes = n_classes
         self.duet_decay = duet_decay
+        self.phase = phase
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         encoder = 'resnet34'
@@ -49,7 +51,7 @@ class MultiModalModel(torch.nn.Module):
         if self.duet_decay:
             self.decay_count = -1
             self.decay_sigma = 500
-            self.decay_stop = 2000
+            self.decay_stop = 4000
 
         if self.active=='sigmoid':
             self.final_active = torch.nn.Sigmoid()
@@ -116,9 +118,10 @@ class MultiModalModel(torch.nn.Module):
         b_output = self.model_b.decoder(*self.model_b.encoder(b_input))
         d_output = self.model_d.decoder(*self.model_d.encoder(d_input))
 
-        if self.duet_decay:
-            self.decay_val = self.update_decay()
-            d_output = d_output * self.decay_val
+        if not self.phase == 'test':
+            if self.duet_decay:
+                self.decay_val = self.update_decay()
+                d_output = d_output * self.decay_val
 
         combined_output = torch.cat((b_output,d_output),dim=1)
         final_prediction = self.final_active(self.combine_layers(combined_output))
@@ -314,6 +317,15 @@ def Training_Loop(dataset_train, dataset_valid, train_parameters, nept_run):
                 if target_type=='binary':
                     current_pred = current_pred.round()
                 """
+
+                # Un-normalizing current image
+                norm_means = train_parameters['training_normalization']['mean'].tolist()
+                norm_stds = train_parameters['training_normalization']['std'].tolist()
+
+                for idx, (m,s) in enumerate(zip(norm_means,norm_stds)):
+                    current_img[idx,:,:] += m
+                    current_img[idx,:,:] *= s
+
                 
                 if type(in_channels)==int:
                     if in_channels == 6:
@@ -328,7 +340,8 @@ def Training_Loop(dataset_train, dataset_valid, train_parameters, nept_run):
                     elif sum(in_channels)==2:
                         current_img = np.concatenate((current_img[0,:,:][None,:,:],current_img[1,:,:][None,:,:]),axis=-2)
 
-                img_dict = {'Image':np.uint8(current_img), 'Pred_Mask':current_pred,'Ground_Truth':current_gt}
+
+                img_dict = {'Image':np.uint8(255*current_img), 'Pred_Mask':np.uint8(255*current_pred),'Ground_Truth':np.uint8(255*current_gt)}
 
                 fig = visualize_continuous(img_dict,output_type)
 

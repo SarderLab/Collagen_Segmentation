@@ -7,11 +7,11 @@
             "Brightfield":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/First_and_Second_Set/B/"
         },
         "label_dir":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/First_and_Second_Set/C/",
-        "output_dir":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/Results/Multimodal_Decay",
+        "output_dir":"/blue/pinaki.sarder/samuelborder/Farzad_Fibrosis/Same_Training_Set_Data/Results/Multimodal_NoDecay",
         "neptune":{
             "project":"samborder/Deep-DUET",
             "source_files":["*.py","**/.py","**.json","**/.json"],
-            "tags":["Multimodal Decay model"]
+            "tags":["Multimodal No Decay model"]
         }
     },
     "train_parameters":{

@@ -81,7 +81,8 @@ def Test_Network(model_path, dataset_valid, nept_run, test_parameters):
         model = MultiModalModel(
             in_channels = in_channels,
             active = active,
-            n_classes = n_classes
+            n_classes = n_classes,
+            phase = 'test'
         )
 
     if torch.cuda.is_available:
@@ -188,6 +189,8 @@ def Test_Network(model_path, dataset_valid, nept_run, test_parameters):
 
                     # Scaling predictions by overlap (mean pixel prediction where there is overlap)
                     final_pred_mask = np.multiply(final_pred_mask,1/overlap_mask)
+
+                    final_pred_mask = 255*((final_pred_mask - np.min(final_pred_mask))/np.max(final_pred_mask))
 
                     im = Image.fromarray((final_pred_mask).astype(np.uint8))
                     # Smoothing image to get rid of grid lines

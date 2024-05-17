@@ -126,7 +126,7 @@ def visualize_continuous(images,output_type):
             else:
                 img = images[key]
 
-            img = np.float32(img)
+            #img = np.float32(img)
 
             if np.shape(img)[0]<np.shape(img)[-1]:
                 img = np.moveaxis(img,source=0,destination=-1)
@@ -274,6 +274,13 @@ def resize_special(img,output_size,transform):
             b_img = np.mean(img[:,:,2:5])
 
             img = np.concatenate((f_img[:,:,None],b_img[:,:,None]),axis=-1)
+
+        elif transform == 'multi_input_decay':
+            """
+            Blanking out fluorescent image
+            """
+            img[:,:,0:3] = 0
+
 
     else:
         if transform=='mean':
